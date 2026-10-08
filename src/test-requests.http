@@ -1,0 +1,17 @@
+### 1. Δημιουργία Νέου Event (POST Request)
+POST http://localhost:8080/api/events
+Content-Type: application/json
+
+{
+  "title": "Rock Concert 2026",
+  "description": "Live music in Athens",
+  "location": "OAKA Stadium",
+  "dateTime": "2026-09-20T21:00:00",
+  "totalSeats": 1000,
+  "availableSeats": 1000
+}
+
+###
+
+### 2. Λήψη Όλων των Events (GET Request)
+GET http://localhost:8080/api/events
