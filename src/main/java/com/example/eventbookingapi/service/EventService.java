@@ -1,6 +1,8 @@
 package com.example.eventbookingapi.service;
 
 
+import com.example.eventbookingapi.dto.EventRequest;
+import com.example.eventbookingapi.dto.EventResponse;
 import com.example.eventbookingapi.model.Event;
 import com.example.eventbookingapi.repository.EventRepository;
 import org.springframework.stereotype.Service;
@@ -18,24 +20,43 @@ public class EventService {
         this.eventRepository = eventRepository;
     }
 
-    // 1. Μέθοδος για να φέρουμε όλα τα events
-    public List<Event> getAllEvents() {
-        return eventRepository.findAll();
+
+    public List<EventResponse> getAllEvents() {
+        return eventRepository.findAll().stream()
+                .map(this::toResponse)
+                .toList();
     }
 
-    // 2. Μέθοδος για να αποθηκεύσουμε ένα νέο event
-    public Event createEvent(Event event) {
-        return eventRepository.save(event);
-    }
-    // 3. Βρες ένα event με βάση το ID
-    public Event getEventById(Long id) {
-        return eventRepository.findById(id)
+    public EventResponse getEventById(Long id) {
+        Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Event not found with id: " + id));
+        return toResponse(event);
+    }
+    public EventResponse createEvent(EventRequest request) {
+        Event event = new Event();
+        event.setTitle(request.title());
+        event.setDescription(request.description());
+        event.setLocation(request.location());
+        event.setDateTime(request.dateTime());
+        event.setTotalSeats(request.totalSeats());
+        event.setAvailableSeats(request.totalSeats()); // server decides this
+        return toResponse(eventRepository.save(event));
     }
 
-    // 4. Διαγραφή ενός event με βάση το ID
     public void deleteEvent(Long id) {
         eventRepository.deleteById(id);
+    }
+
+    private EventResponse toResponse(Event e) {
+        return new EventResponse(
+                e.getId(),
+                e.getTitle(),
+                e.getDescription(),
+                e.getLocation(),
+                e.getDateTime(),
+                e.getTotalSeats(),
+                e.getAvailableSeats()
+        );
     }
 }
 

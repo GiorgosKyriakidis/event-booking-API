@@ -8,10 +8,16 @@ Content-Type: application/json
   "location": "OAKA Stadium",
   "dateTime": "2026-09-20T21:00:00",
   "totalSeats": 1000,
-  "availableSeats": 1000
+  "availableSeats": 99999
 }
 
 ###
 
-### 2. Λήψη Όλων των Events (GET Request)
+### Get all
 GET http://localhost:8080/api/events
+
+### Get one
+GET http://localhost:8080/api/events/1
+
+### Delete
+DELETE http://localhost:8080/api/events/1

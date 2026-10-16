@@ -1,6 +1,7 @@
 package com.example.eventbookingapi.controller;
 
-import com.example.eventbookingapi.model.Event;
+import com.example.eventbookingapi.dto.EventRequest;
+import com.example.eventbookingapi.dto.EventResponse;
 import com.example.eventbookingapi.service.EventService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,18 +20,19 @@ public class EventController {
 
     // Endpoint για να πάρουμε όλα τα events (GET Request)
     @GetMapping
-    public List<Event> getAllEvents() {
+    public List<EventResponse> getAllEvents() {
         return eventService.getAllEvents();
     }
+
     @GetMapping("/{id}")
-    public Event getEventById(@PathVariable Long id) {
+    public EventResponse getEventById(@PathVariable Long id) {
         return eventService.getEventById(id);
     }
 
-    // Endpoint για να δημιουργήσουμε ένα νέο event (POST Request)
+
     @PostMapping
-    public Event createEvent(@RequestBody Event event) {
-        return eventService.createEvent(event);
+    public EventResponse createEvent(@RequestBody EventRequest request) {
+        return eventService.createEvent(request);
     }
     @DeleteMapping("/{id}")
     public String deleteEvent(@PathVariable Long id) {
