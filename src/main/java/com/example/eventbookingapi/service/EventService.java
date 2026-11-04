@@ -3,6 +3,7 @@ package com.example.eventbookingapi.service;
 
 import com.example.eventbookingapi.dto.EventRequest;
 import com.example.eventbookingapi.dto.EventResponse;
+import com.example.eventbookingapi.exception.ResourceNotFoundException;
 import com.example.eventbookingapi.model.Event;
 import com.example.eventbookingapi.repository.EventRepository;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,7 @@ public class EventService {
 
     private final EventRepository eventRepository;
 
-    // Εδώ κάνουμε "Dependency Injection".
-    // Λέμε στο Spring να δώσει αυτόματα το Repository στο Service.
+
     public EventService(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
     }
@@ -29,7 +29,7 @@ public class EventService {
 
     public EventResponse getEventById(Long id) {
         Event event = eventRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Event not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id: " + id));
         return toResponse(event);
     }
     public EventResponse createEvent(EventRequest request) {
@@ -44,6 +44,9 @@ public class EventService {
     }
 
     public void deleteEvent(Long id) {
+        if (!eventRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Event not found with id: " + id);
+        }
         eventRepository.deleteById(id);
     }
 

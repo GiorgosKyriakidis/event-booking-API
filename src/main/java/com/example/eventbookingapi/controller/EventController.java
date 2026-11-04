@@ -4,8 +4,12 @@ import com.example.eventbookingapi.dto.EventRequest;
 import com.example.eventbookingapi.dto.EventResponse;
 import com.example.eventbookingapi.service.EventService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import jakarta.validation.Valid;
+
 
 @RestController
 @RequestMapping("/api/events")
@@ -31,12 +35,13 @@ public class EventController {
 
 
     @PostMapping
-    public EventResponse createEvent(@RequestBody EventRequest request) {
-        return eventService.createEvent(request);
+    public ResponseEntity<EventResponse> createEvent(@Valid @RequestBody EventRequest request) {
+        EventResponse created = eventService.createEvent(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
     @DeleteMapping("/{id}")
-    public String deleteEvent(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
         eventService.deleteEvent(id);
-        return "Event with ID " + id + " was deleted successfully!";
+        return ResponseEntity.noContent().build();
     }
 }
