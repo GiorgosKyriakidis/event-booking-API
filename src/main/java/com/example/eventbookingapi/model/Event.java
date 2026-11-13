@@ -1,6 +1,6 @@
 package com.example.eventbookingapi.model;
 
-
+import jakarta.persistence.Version;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -30,4 +30,7 @@ public class Event {
 
     @Column(nullable = false)
     private Integer availableSeats;
+
+    @Version
+    private Long version;
 }
